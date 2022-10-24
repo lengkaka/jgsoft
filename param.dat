@@ -1,0 +1,135 @@
+!==============================================================!
+!                     ◎  计算参数表 ◎                        !
+!=======================ctrl_in_computing======================!
+!  stopnow     =   0-不中止程序 1-中止程序                     !
+!  viewnow     =   0-不显示流场 1-显示流场                     !
+!  viewtype    =   0-显示特定边界流场 1-自定义显示流场         !
+!                  2-显示全场                                  !
+!  viewformat  =   1-tecplot 2-plot3D 3-二者                   !
+!  isdim       =   0-无量纲 1-有量纲                           !
+!  id_write    =   0-不存储时间序列文件                        !
+!                  1-存储时间序列文件                          !
+!  data_pos    =   0-数据位于网格节点上                        !
+!                  1-数据位于网格单元中心处                    !
+!==============================================================!
+$ctrl_in_computing
+stopnow     =     0默认
+viewnow     =     0默认
+viewnowf    =     0默认
+viewtype    =     2默认
+viewformat  =     1 默认
+isdim       =     0默认
+data_pos    =     0默认
+/
+!==========================inflow==============================!
+!  height     ：    飞行高度（单位：km，非负值时有效）         !
+!  gama       ：    来流gama值                                 !
+!  moo        ：    来流马赫数                                 !
+!  reynolds   ：    真实雷诺数（基于特征长度）                 !
+!  attack     ：    攻角  （单位：度）                         !
+!  sideslip   ：    侧滑角（单位：度）                         !
+!  tref       ：    来流温度（单位：K）                        !
+!  pref       ：    来流压力（单位：Pa）                       !
+!  rref       ：    来流密度（单位：kg/m**3，非负值时有效）    !
+!  vref       ：    来流速度（单位：m/s，非负值时有效）        !
+!  twall      ：    等温壁的物面温度（单位：K）                !
+!  nprocs_u_num 、nprocs_v_num 、nprocs_w_num 速度空间u方向上并行剖分份数
+!  output_procs_step : 写流场文件的进程数
+!==============================================================!
+$inflow
+height    =     -25.0
+gama      =     1.6666666666666666666666666666667d0
+moo       =     .20
+reynolds  =     82940.19
+attack    =     20.0
+sideslip  =     0.0
+tref      =     219.585
+pref      =     -59.9
+rref      =     1.14E-04
+vref      =    -50.0
+twall     =     1000
+nprocs_u_num = 1
+nprocs_v_num = 1
+nprocs_w_num = 1
+output_procs_step = 1默认
+/
+!==========================force===============================!
+!  nwholefield  ： 全场（1）或半场（0）计算                    !
+!  sref         ： 真实的参考面积                              !
+!  lfref        ： 真实的参考长度（定义雷诺数的特征长度）      !
+!  (x,y,z)ref   ： 真实的参考点坐标                            !
+!  lref         ： 长度尺度（网格放大倍数的倒数）              !
+!==============================================================!
+$force
+nwholefield  =      0
+lref         =      0.001
+sref         =      0.02409864
+lfref        =      0.2805264
+xref         =      0.0
+yref         =      0.0
+zref         =      0.0
+/
+!==========================filename============================!
+!  ctype     ：   网格存储方式（Gridgen or plot3D）            !
+!  cformat   ：   网格存储格式（ASCII，binary，unformatted ）  !
+!  gridname  ：   网格坐标数据文件名（最好加引号）             !
+!  bcname    ：   网格边界信息文件名（最好加引号）             !
+!  flowname  ：   流场数据文件名（最好加引号）                 !
+!  forcename ：   气动力时间历程文件名（最好加引号）           !
+!  errhis    ：   残差时间历程文件名（最好加引号）             !
+!==============================================================!
+$filename
+cformat         =   'unformatted'
+
+gridname  =      'cylinder-41x61.grd'
+bcname    =      'cylinder-41x61.inp'
+
+flowname        =   'flow.dat'
+forcename       =   'force.plt'
+errhis          =   'res.plt'需要调整明文
+/
+!==========================control=============================!
+!  nstart      = 0-重新计算(有流场置为2) 1-续算步数重置 2-续算 !
+!                其它值-无条件重算(流场存在与否)               !
+!  nomax       = 10-迭代总步数                                 !
+!  ndisk       = 10-存储流场的间隔步数                         !
+!  nwerror     = 10-计算残差间隔步数                           !
+!  nformat     = tecplot-tecplot格式 plot3D-plot3D格式         !
+!                both-tecplot和plot3D格式                      !
+!  nplot       = 0-默认输出 1-自定义输出 2-全场输出(tecplot)   !
+!  u_num       = u速度空间离散点数
+!  integration_scheme	= 1-Newton-Cotes积分，2-Gauss-Hermite积分
+!==============================================================!
+$control
+nstart      =     0
+nomax       =     25000
+ndisk       =     2
+nforce      =     1
+nwerror     =     1
+u_num_global       =    13点数
+v_num_global       =    13
+w_num_global       =    5
+integration_scheme =     1
+/
+!=========================multigrid============================!
+!  nmultigrid  = 1-单重网格 n-n(n>1)重网格(自动)               !
+!==============================================================!
+$multigrid
+nmultigrid  =     1 默认
+/
+!===========================step===============================!
+!  cfl      = 100.0-CFL数                                      !
+!==============================================================!
+$step
+cfl      =      2.
+/
+!=====================technic含义==============================!
+! nlhs    = 1-显式方法 2-隐式方法               !
+! nlimiter= 0-0阶精度 1-minmod 2-vanalbada
+！cdom     ：是1否0 采用守恒型离散速度坐标法
+!==============================================================!
+$technic
+nlhs     =      2
+nlimiter =      1
+cdom     =      0
+/
