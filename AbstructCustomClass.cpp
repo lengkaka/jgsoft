@@ -24,3 +24,13 @@ CustomClass AbstructCustomClass::getconfig()
 {
     return _config;
 }
+
+void AbstructCustomClass::hideWidget()
+{
+
+}
+
+void AbstructCustomClass::showWidget()
+{
+
+}

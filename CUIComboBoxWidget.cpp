@@ -11,15 +11,19 @@ CUIComboBoxWidget::CUIComboBoxWidget(QWidget *parent) : QWidget(parent)
 
 void CUIComboBoxWidget::render()
 {
-    QHBoxLayout *Hlayout=new QHBoxLayout();
+    //QHBoxLayout *Hlayout=new QHBoxLayout();
+    QFormLayout* FormLayout=new QFormLayout();
+    titleLabel->setText(_config.Label());
+    titleLabel->setFixedWidth(160);
     for (int i=0;i< _config.candidateValue().size();i++) {
         combox->addItem(_config.candidateValue().at(i));
         if(_config.IntDefaultValue()== _config.IntCandidateValue().at(i)){
             combox->setCurrentIndex(i);
         }
     }
-    Hlayout->addWidget(combox);
-    setLayout(Hlayout);
+    //Hlayout->addWidget(combox);
+    FormLayout->addRow(titleLabel,combox);
+    setLayout(FormLayout);
     this->layout()->setContentsMargins(0,0,0,0);
 }
 

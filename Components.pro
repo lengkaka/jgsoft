@@ -22,6 +22,7 @@ SOURCES += \
     CUILineEditWidget.cpp \
     CUIRadioButtonWidget.cpp \
     CustomClass.cpp \
+    CustomSignal.cpp \
     main.cpp \
     CustomCollectionWidget.cpp
 
@@ -32,7 +33,8 @@ HEADERS += \
     CUILineEditWidget.h \
     CUIRadioButtonWidget.h \
     CustomClass.h \
-    CustomCollectionWidget.h
+    CustomCollectionWidget.h \
+    CustomSignal.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

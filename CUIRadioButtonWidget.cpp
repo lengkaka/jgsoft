@@ -7,15 +7,15 @@ CUIRadioButtonWidget::CUIRadioButtonWidget(QWidget *parent) : QWidget(parent)
 {
 	_config = getconfig();
 
-
-
 }
 
 void CUIRadioButtonWidget::render()
 {
     QRadioButton *btnRadio;
     QHBoxLayout *Hlayout=new QHBoxLayout();
-
+    QFormLayout* FormLayout=new QFormLayout();
+    titleLabel->setText(_config.Label());
+    titleLabel->setFixedWidth(160);
     switch (_config.getDataType()) {
 
     case QStringType:
@@ -31,6 +31,7 @@ void CUIRadioButtonWidget::render()
             btnRadiolist.append(btnRadio);
             Hlayout->addWidget(btnRadio);
         }
+        FormLayout->addRow(titleLabel,Hlayout);
 		break;
     }
     case IntType:
@@ -46,6 +47,7 @@ void CUIRadioButtonWidget::render()
             btnRadiolist.append(btnRadio);
             Hlayout->addWidget(btnRadio);
         }
+        FormLayout->addRow(titleLabel,Hlayout);
 		break;
     }
     case BoolType:
@@ -61,6 +63,7 @@ void CUIRadioButtonWidget::render()
             btnRadiolist.append(btnRadio);
             Hlayout->addWidget(btnRadio);
         }
+        FormLayout->addRow(titleLabel,Hlayout);
 		break;
     }
     case DoubleType:
@@ -68,12 +71,17 @@ void CUIRadioButtonWidget::render()
 		break;
     }
     }
+
     for (int i=0;i<btnRadiolist.size();i++) {
         connect(btnRadiolist.at(i),&QRadioButton::toggled,this,&CUIRadioButtonWidget::setRadioButtonValue);
     }
-    setLayout(Hlayout);
+    setLayout(FormLayout);
     this->layout()->setContentsMargins(0,0,0,0);
-
+    CustomSignal* customSignal=CustomSignal::getInstance();
+    for (int i=0;i<btnRadiolist.size();i++) {
+        connect(btnRadiolist.at(i),&QRadioButton::toggled,this,&CUIRadioButtonWidget::buttonSignalChange);
+        connect(this,&CUIRadioButtonWidget::SignalChange,customSignal,&CustomSignal::Change);
+    }
 
 }
 
@@ -82,6 +90,20 @@ bool CUIRadioButtonWidget::submit()
 {
     return true;
 }
+
+void CUIRadioButtonWidget::hideWidget()
+{
+    this->hide();
+    //this->setVisible(false);
+}
+
+void CUIRadioButtonWidget::showWidget()
+{
+    this->show();
+    //this->setVisible(true);
+}
+
+
 
 void CUIRadioButtonWidget::setRadioButtonValue()
 {
@@ -94,4 +116,9 @@ void CUIRadioButtonWidget::setRadioButtonValue()
 		}
 	}
 
+}
+
+void CUIRadioButtonWidget::buttonSignalChange()
+{
+    emit SignalChange(titleLabel->text(),_config.getIntValue());
 }

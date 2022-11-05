@@ -186,6 +186,56 @@ QString CustomClass::getUnidade()
     return _Unidade;
 }
 
+double CustomClass::getDoubleStartNum()
+{
+    return _doubleStartNum;
+}
+
+void CustomClass::setDoubleStartNum(double doubleStartNum)
+{
+    _doubleEndNum=doubleStartNum;
+}
+
+double CustomClass::getDoubleEndNum()
+{
+    return _doubleEndNum;
+}
+
+void CustomClass::setDoubleEndNum(double doubleEndNum)
+{
+    _doubleEndNum=doubleEndNum;
+}
+
+int CustomClass::getIntStartNum()
+{
+    return _intStartNum;
+}
+
+void CustomClass::setIntStartNum(int intStartNum)
+{
+    _intStartNum=intStartNum;
+}
+
+int CustomClass::getIntEndNum()
+{
+    return _intEndNum;
+}
+
+void CustomClass::setIntEndNum(int intEndNum)
+{
+    _intEndNum=intEndNum;
+}
+
+void CustomClass::setLimit(bool limit)
+{
+    _limit=limit;
+}
+
+bool CustomClass::getLimit()
+{
+    return _limit;
+}
+
 void CustomClass::setCustomConfig(DataType dataType, QString label, ComponentType type, QString defaultValue, bool required, QString value)
 {
     _dataType=dataType;
@@ -308,4 +358,30 @@ void CustomClass::initQStringLineEidt(QString title, QString initValue, bool req
     _defaultValue=initValue;
     _required=required;
     _Value=initValue;
+}
+
+void CustomClass::initDoubleLineEidt(QString title, double initValue, bool required, double startnum, double endnum)
+{
+    _dataType=DoubleType;
+    _label=title;
+    _componentType=LineEditType;
+    _DoubleDefaultValue=initValue;
+    _required=required;
+    _DoubleValue=initValue;
+    _doubleStartNum=startnum;
+    _doubleEndNum=endnum;
+    _limit=true;
+}
+
+void CustomClass::initIntLineEidt(QString title, int initValue, bool required, int startnum, int endnum)
+{
+    _dataType=IntType;
+    _label=title;
+    _componentType=LineEditType;
+    _IntDefaultValue=initValue;
+    _required=required;
+    _IntValue=initValue;
+    _intStartNum=startnum;
+    _intEndNum=endnum;
+    _limit=true;
 }

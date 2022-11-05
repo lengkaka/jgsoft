@@ -10,6 +10,7 @@
 #include "CUIRadioButtonWidget.h"
 #include "CUIComboBoxWidget.h"
 #include "CUILineEditWidget.h"
+#include "CustomSignal.h"
 class CustomCollectionWidget : public QWidget
 {
     Q_OBJECT
@@ -24,11 +25,13 @@ private:
     void setWidgetList(ArgumentsClass c);//把参数组对象传到参数组列表里
     void AddCustomObjList(AbstructCustomClass* c);//添加组件到组件列表
     QString GroupboxStyle();
-    void initGroupBox(QGroupBox *groupbox,ArgumentsClass argument,QFormLayout* FormLayout);
-    void initCustom(CustomClass custom,QFormLayout* FormLayout);
+    void initGroupBox(QGroupBox *groupbox,ArgumentsClass argument,QVBoxLayout* VBoxLayout2);
+    void initCustom(CustomClass custom,QVBoxLayout* VBoxLayout2);
     void initButton(QVBoxLayout* VBoxLayout);
+
 private slots:
     void save();
+    void updataLayout(QString name,int value);
 private:
     std::vector<AbstructCustomClass*> _customObjList={};//组件列表
     std::vector<ArgumentsClass> _widgetList={};//参数组列表

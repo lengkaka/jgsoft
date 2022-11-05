@@ -14,9 +14,10 @@ public:
     bool submit() override;
 private:
     QLineEdit *_LineEdit=new QLineEdit();
-    QLabel *_unidade=new QLabel();
+    QLabel *titleLabel=new QLabel();
 private slots:
     void setLineEditValue();
+    void limitLineEdit();
 signals:
 
 };

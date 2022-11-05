@@ -62,18 +62,34 @@ public:
     void setUnidade(QString Unidade);
     QString getUnidade();
 
+    double getDoubleStartNum();
+    void setDoubleStartNum(double doubleStartNum);
+    double getDoubleEndNum();
+    void setDoubleEndNum(double doubleEndNum);
+    int getIntStartNum();
+    void setIntStartNum(int intStartNum);
+    int getIntEndNum();
+    void setIntEndNum(int intEndNum);
+    void setLimit(bool limit);
+    bool getLimit();
+
     void setCustomConfig(DataType dataType,QString label,ComponentType type,QString defaultValue,bool required,QString value);
     void setCustomConfig(DataType dataType,QString label,ComponentType type,int defaultValue,bool required,int value);
     void setCustomConfig(DataType dataType,QString label,ComponentType type,bool defaultValue,bool required,bool value);
     void setCustomConfig(DataType dataType,QString label,ComponentType type,double defaultValue,bool required,double value);
     void initWithBool(QString title,bool initValue,bool required);
     void initWithInt(QString title,int initValue,bool required);
+
     void initDoubleLineEidt(QString title,double initValue,bool required,QString unidade);
     void initIntLineEidt(QString title,int initValue,bool required,QString unidade);
     void initQStringLineEidt(QString title,QString initValue,bool required,QString unidade);
+
     void initDoubleLineEidt(QString title,double initValue,bool required);
     void initIntLineEidt(QString title,int initValue,bool required);
     void initQStringLineEidt(QString title,QString initValue,bool required);
+
+    void initDoubleLineEidt(QString title,double initValue,bool required,double startnum,double endnum);
+    void initIntLineEidt(QString title,int initValue,bool required,int startnum,int endnum);
 private:
     DataType _dataType;//参数的数据类型
     QString _label;//每一行的标题
@@ -93,6 +109,11 @@ private:
     bool _BoolValue;//bool值
     double _DoubleValue;//double值
     QString _Unidade="";//输入框的单位值（选填）
+    double _doubleStartNum;
+    double _doubleEndNum;
+    double _intStartNum;
+    double _intEndNum;
+    bool _limit=false;
 };
 
 #endif // CUSTOMCLASS_H

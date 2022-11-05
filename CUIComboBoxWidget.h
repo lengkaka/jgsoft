@@ -4,7 +4,7 @@
 #include "AbstructCustomClass.h"
 #include <QComboBox>
 #include <QWidget>
-
+#include <QLabel>
 class CUIComboBoxWidget : public QWidget,public AbstructCustomClass
 {
     Q_OBJECT
@@ -15,6 +15,7 @@ public:
 private:
     QStringList strList;
     QComboBox *combox=new QComboBox();
+    QLabel *titleLabel=new QLabel();
 public slots:
     void setComboBoxValue();
 signals:

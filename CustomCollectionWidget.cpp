@@ -8,6 +8,7 @@
 #include <QSpacerItem>
 #include <QComboBox>
 #include <QMessageBox>
+#include "float.h"
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1600)
 # pragma execution_character_set("utf-8")
@@ -104,7 +105,8 @@ CustomCollectionWidget::CustomCollectionWidget(QWidget *parent)
     ArgumentsClass argument2;//第二个groupbox
     argument2.setGroupName("inflow");
     CustomClass custom8;
-    custom8.initDoubleLineEidt(tr("飞行高度"),-25.0,true,tr("km"));
+    double limit=DBL_MIN;
+    custom8.initDoubleLineEidt(tr("飞行高度(单位:km)"),-25.0,true,-9999999999,0);
     argument2.AddArgument(custom8);
 
     CustomClass custom9;
@@ -120,31 +122,31 @@ CustomCollectionWidget::CustomCollectionWidget(QWidget *parent)
     argument2.AddArgument(custom11);
 
     CustomClass custom12;
-    custom12.initDoubleLineEidt(tr("攻角"),20.0,true,tr("度"));
+    custom12.initDoubleLineEidt(tr("攻角(单位:度)"),20.0,true);
     argument2.AddArgument(custom12);
 
     CustomClass custom13;
-    custom13.initDoubleLineEidt(tr("侧滑角"),0.0,true,tr("度"));
+    custom13.initDoubleLineEidt(tr("侧滑角(单位:度)"),0.0,true);
     argument2.AddArgument(custom13);
 
     CustomClass custom14;
-    custom14.initDoubleLineEidt(tr("来流温度"),219.585,true,tr("K"));
+    custom14.initDoubleLineEidt(tr("来流温度(单位:K)"),219.585,true);
     argument2.AddArgument(custom14);
 
     CustomClass custom15;
-    custom15.initDoubleLineEidt(tr("来流压力"),-59.9,true,tr("Pa"));
+    custom15.initDoubleLineEidt(tr("来流压力(单位:Pa)"),-59.9,true);
     argument2.AddArgument(custom15);
 
     CustomClass custom16;
-    custom16.initDoubleLineEidt(tr("来流密度"),1.14,true,tr("kg/m³"));
+    custom16.initDoubleLineEidt(tr("来流密度(单位:kg/m³)"),1.14,true,-9999999999,0);
     argument2.AddArgument(custom16);
 
     CustomClass custom17;
-    custom17.initDoubleLineEidt(tr("来流速度"),-50.0,true,tr("m/s"));
+    custom17.initDoubleLineEidt(tr("来流速度(单位:m/s)"),-50.0,true,-999999999,0);
     argument2.AddArgument(custom17);
 
     CustomClass custom18;
-    custom18.initIntLineEidt(tr("等温壁的物面温度"),1000,true,tr("K"));
+    custom18.initIntLineEidt(tr("等温壁的物面温度(单位:K)"),1000,true);
     argument2.AddArgument(custom18);
 
     CustomClass custom19;
@@ -167,6 +169,8 @@ CustomCollectionWidget::CustomCollectionWidget(QWidget *parent)
 
     setGeometry(0,0,530,800);
     button=new QPushButton;
+    CustomSignal* customSignal=CustomSignal::getInstance();
+    connect(customSignal,&CustomSignal::paraChange,this,&CustomCollectionWidget::updataLayout);
     connect(button,&QPushButton::clicked,this,&CustomCollectionWidget::save);
     render();
 
@@ -180,14 +184,16 @@ void CustomCollectionWidget::render()
 {
     QVBoxLayout* VBoxLayout = new QVBoxLayout();//设置垂直布局
     for (int i =0;i<_widgetList.size();i++) {
-        QFormLayout* FormLayout = new QFormLayout();//设置Form布局
+        //QFormLayout* FormLayout = new QFormLayout();//设置Form布局
+        QVBoxLayout* VBoxLayout2 = new QVBoxLayout();
         ArgumentsClass argument=_widgetList.at(i);
         QGroupBox *groupbox=new QGroupBox();
-        initGroupBox(groupbox,argument,FormLayout);//初始化groupbox
+        //initGroupBox(groupbox,argument,FormLayout);//初始化groupbox
+        initGroupBox(groupbox,argument,VBoxLayout2);//初始化groupbox
         std::vector<CustomClass> argumentList=argument.getArgument();
         for (int j=0;j<argumentList.size();j++) {
             CustomClass custom=argumentList.at(j);//参数对象列表
-            initCustom(custom,FormLayout);//初始化参数列表
+            initCustom(custom,VBoxLayout2);//初始化参数列表
         }
         VBoxLayout->addWidget(groupbox);
     }
@@ -234,10 +240,10 @@ QString CustomCollectionWidget::GroupboxStyle()
     return style;
 }
 
-void CustomCollectionWidget::initGroupBox(QGroupBox *groupbox,ArgumentsClass argument, QFormLayout *FormLayout)
+void CustomCollectionWidget::initGroupBox(QGroupBox *groupbox,ArgumentsClass argument, QVBoxLayout* VBoxLayout2)
 {
     groupbox->setTitle(argument.getGroupName());
-    groupbox->setLayout(FormLayout);
+    groupbox->setLayout(VBoxLayout2);
     groupbox->setStyleSheet(GroupboxStyle());
     QSizePolicy GroupBoxSizePolicy = groupbox->sizePolicy();
     GroupBoxSizePolicy.setHorizontalPolicy(QSizePolicy::Minimum);
@@ -252,10 +258,10 @@ void CustomCollectionWidget::initGroupBox(QGroupBox *groupbox,ArgumentsClass arg
 
 }
 
-void CustomCollectionWidget::initCustom(CustomClass custom,QFormLayout* FormLayout)
+void CustomCollectionWidget::initCustom(CustomClass custom,QVBoxLayout* VBoxLayout2)
 {
-    QLabel *labeltitle=new QLabel(custom.Label());
-    labeltitle->setFixedWidth(160);
+//    QLabel *labeltitle=new QLabel(custom.Label());
+//    labeltitle->setFixedWidth(160);
     switch (custom.getComponentType())
     {
     case RadioButtonType:
@@ -264,7 +270,8 @@ void CustomCollectionWidget::initCustom(CustomClass custom,QFormLayout* FormLayo
         AddCustomObjList(radiobutton);
         radiobutton->setconfig(custom);
         radiobutton->render();
-        FormLayout->addRow(labeltitle,radiobutton);
+        //FormLayout->addRow(radiobutton);
+        VBoxLayout2->addWidget(radiobutton);
         break;
     }
     case CheckBoxType:
@@ -277,7 +284,8 @@ void CustomCollectionWidget::initCustom(CustomClass custom,QFormLayout* FormLayo
         AddCustomObjList(lineEdit);
         lineEdit->setconfig(custom);
         lineEdit->render();
-        FormLayout->addRow(labeltitle,lineEdit);
+        //FormLayout->addRow(lineEdit);
+        VBoxLayout2->addWidget(lineEdit);
         break;
     }
     case ComboBoxType:
@@ -286,7 +294,8 @@ void CustomCollectionWidget::initCustom(CustomClass custom,QFormLayout* FormLayo
         AddCustomObjList(combox);
         combox->setconfig(custom);
         combox->render();
-        FormLayout->addRow(labeltitle,combox);
+        //FormLayout->addRow(combox);
+        VBoxLayout2->addWidget(combox);
         break;
     }
     }
@@ -362,7 +371,32 @@ void CustomCollectionWidget::save()
         }
     }
     else {
-        //QMessageBox::critical(this, tr(""),  tr(""),QMessageBox::Save | QMessageBox::Discard,  QMessageBox::Discard);
+        qDebug()<<"有元素为空";
+    }
+}
+
+void CustomCollectionWidget::updataLayout(QString name,int value)
+{
+    if(name=="isdim"&&value==1)
+    {
+        for (int i=0;i<_customObjList.size();i++) {
+
+            QString title=_customObjList.at(i)->getconfig().Label();
+            if(title=="data_pos")
+            {
+                _customObjList.at(i)->hideWidget();
+            }
+        }
+    }
+    else if (name=="isdim"&&value==0) {
+        for (int i=0;i<_customObjList.size();i++) {
+
+            QString title=_customObjList.at(i)->getconfig().Label();
+            if(title=="data_pos")
+            {
+                _customObjList.at(i)->showWidget();
+            }
+        }
     }
 }
 
