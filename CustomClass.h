@@ -72,6 +72,8 @@ public:
     void setIntEndNum(int intEndNum);
     void setLimit(bool limit);
     bool getLimit();
+    void setShow(bool show);
+    bool getShow();
 
     void setCustomConfig(DataType dataType,QString label,ComponentType type,QString defaultValue,bool required,QString value);
     void setCustomConfig(DataType dataType,QString label,ComponentType type,int defaultValue,bool required,int value);
@@ -114,6 +116,7 @@ private:
     double _intStartNum;
     double _intEndNum;
     bool _limit=false;
+    bool _show=true;
 };
 
 #endif // CUSTOMCLASS_H

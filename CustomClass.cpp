@@ -236,6 +236,16 @@ bool CustomClass::getLimit()
     return _limit;
 }
 
+void CustomClass::setShow(bool show)
+{
+    _show=show;
+}
+
+bool CustomClass::getShow()
+{
+    return _show;
+}
+
 void CustomClass::setCustomConfig(DataType dataType, QString label, ComponentType type, QString defaultValue, bool required, QString value)
 {
     _dataType=dataType;

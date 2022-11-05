@@ -324,49 +324,56 @@ void CustomCollectionWidget::save()
         //QMessageBox::information(nullptr,"Message","保存数据成功");
         int size=_customObjList.size();
         for (int i=0;i<size;i++) {
+
             ComponentType Type=_customObjList.at(i)->getconfig().getComponentType();
             CustomClass config=_customObjList.at(i)->getconfig();
-            switch (Type) {
-            case RadioButtonType:
+            if(config.getShow())
             {
-                qDebug()<<config.getIntValue();
-                break;
-            }
-            case LineEditType:
-            {
-                DataType dataType=config.getDataType();
-                switch (dataType) {
-                case DoubleType:
-                {
-                    qDebug()<<config.getDoubleValue();
-                    break;
-                }
-                case IntType:
+                switch (Type) {
+                case RadioButtonType:
                 {
                     qDebug()<<config.getIntValue();
                     break;
                 }
-                case BoolType:
+                case LineEditType:
+                {
+                    DataType dataType=config.getDataType();
+                    switch (dataType) {
+                    case DoubleType:
+                    {
+                        qDebug()<<config.getDoubleValue();
+                        break;
+                    }
+                    case IntType:
+                    {
+                        qDebug()<<config.getIntValue();
+                        break;
+                    }
+                    case BoolType:
+                    {
+                        break;
+                    }
+                    case QStringType:
+                    {
+                        qDebug()<<config.getValue();
+                        break;
+                    }
+                    }
+                    break;
+                }
+                case ComboBoxType:
+                {
+                    qDebug()<<config.getIntValue();
+                    break;
+                }
+                case CheckBoxType:
                 {
                     break;
                 }
-                case QStringType:
-                {
-                    qDebug()<<config.getValue();
-                    break;
                 }
-                }
-                break;
             }
-            case ComboBoxType:
-            {
-                qDebug()<<config.getIntValue();
-                break;
-            }
-            case CheckBoxType:
-            {
-                break;
-            }
+            else {
+                continue;
             }
         }
     }

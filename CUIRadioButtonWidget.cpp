@@ -94,13 +94,13 @@ bool CUIRadioButtonWidget::submit()
 void CUIRadioButtonWidget::hideWidget()
 {
     this->hide();
-    //this->setVisible(false);
+    _config.setShow(false);
 }
 
 void CUIRadioButtonWidget::showWidget()
 {
     this->show();
-    //this->setVisible(true);
+    _config.setShow(true);
 }
 
 
